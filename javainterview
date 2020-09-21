@@ -1,0 +1,32 @@
+A.
+string :  immutable , string pools, equals ==
+
+string methods :  byte[] myb=mys.getbytes()
+                  new String(myb)
+                  byte a=mys.charAt(po)
+                  mys.toCharArray()
+                 
+
+
+char[]
+byte[]
+
+   toCharArray()
+
+   mys.charAt(2);
+
+   mys.getChars(0,  7
+
+String comparison : 
+
+B.
+
+string subSequence method : 
+
+myst.substring()
+
+myst.subSequence(str.leng
+   myst.toUpperCase()
+   myst.toLowerCase()
+                  
+                  

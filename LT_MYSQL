@@ -1,0 +1,101 @@
+#1 select 2nd highst salary from employee : 
+
+# Write your MySQL query statement below : use ifnull(a, null): mysql only and limit 1 offset 1 : mysql only
+select ifnull((select distinct salary from employee order by salary desc limit 1 offset 1), null) as secondhighestSalary ;
+
+#or more generic :  (can select twice to do the 2nd )
+select max(salary) as SecondHighestSalary from employee where salary < (select max(salary) from employee);
+
+#2 select all courses that has more than 5 students : note the students may have registered more than once in the same class
+#Note :  1. count... aggregate operations have to use having not where  2. Inside count we can not have subquery : count(distince field) is OK
+#Remember Using count with having (NOT WHERE)
+select distinct class from courses group by class having count(distinct student)>=5;
+
+#3 Find out all date's id with higher temperator to its previous dates
+#Note : 2 ways : select * from t a1, t a2 where ...(select the same table twice)
+#            or select * from t a1 join t a2 on ....
+# select from t a1, t a2 .. WHERE or select from t a1 join t a2 on
+# select count(xxx) group by ... HAVING ...
+#Note :  WHERE vs ON vs HAVING
+
+(DATEDIFF : MYSQL or SQLSERVER built-in functions)
+  select w2.id as 'Id' from weather w1 join weather w2 on  DATEDIFF(w2.RecordDate, w1.RecordDate) = 1 and w2.Temperature > w1.Temperature;
+   select w2.id as 'Id' from weather w1 , weather w2 where  DATEDIFF(w2.RecordDate, w1.RecordDate) = 1 and w2.Temperature > w1.Temperature;
+
+#4. delete duplicates (emails)
+delete from person p1 where p1.id not in (select min(p2.id) from (select * from person) as p2 group by p2.email);
+
+#5 find customers who never made an order
+select name as Customers from Customers where id not in (select distinct customerId from orders);
+
+#6 update with case : 
+update salary set sex=
+case sex
+   when 'f'then 'm'
+   else 'f'
+   END;
+
+#7 : even number (function MOD(no, 2)=0 :  equal = not equal != or <>
+select * from cinema where MOD(id, 2) = 1 and description != "boring"  order by rating desc;
+
+#8 select non-manager employee who has higher salary than his/her manager
+select n.name as Employee from Employee n where n.ManagerId is not null and n.salary > (select salary from employee e where e.id=n.ManagerId);
+
+#9 join : default to inner join (When the joint item in both tables : 
+#report for all  persons who  has or not have an address (left join) : 
+#select p.FirstName, p.Lastname, a.City, a.State from Person p left join Address a  on (p.PersonId=a.PersonId);
+
+#10 : select duplicate email : count having
+select distinct Email from person group by email having count(email)>1;
+
+#11 regrouping table : report view :  Reformat Department Table
+SELECT d.id, 
+MAX(CASE WHEN d.month='Jan' THEN d.revenue END) AS 'Jan_Revenue',
+MAX(CASE WHEN d.month='Feb' THEN d.revenue END) AS 'Feb_Revenue',
+MAX(CASE WHEN d.month='Mar' THEN d.revenue END) AS 'Mar_Revenue',
+MAX(CASE WHEN d.month='Apr' THEN d.revenue END) AS 'Apr_Revenue',
+MAX(CASE WHEN d.month='May' THEN d.revenue END) AS 'May_Revenue',
+MAX(CASE WHEN d.month='Jun' THEN d.revenue END) AS 'Jun_Revenue',
+MAX(CASE WHEN d.month='Jul' THEN d.revenue END) AS 'Jul_Revenue',
+MAX(CASE WHEN d.month='Aug' THEN d.revenue END) AS 'Aug_Revenue',
+MAX(CASE WHEN d.month='Sep' THEN d.revenue END) AS 'Sep_Revenue',
+MAX(CASE WHEN d.month='Oct' THEN d.revenue END) AS 'Oct_Revenue',
+MAX(CASE WHEN d.month='Nov' THEN d.revenue END) AS 'Nov_Revenue',
+MAX(CASE WHEN d.month='Dec' THEN d.revenue END) AS 'Dec_Revenue'
+FROM Department AS d
+GROUP BY id;
+
+#12 m highest integer : 
+ select distinct salary from Employee order by salary desc limit 1 offset M
+
+ #13 select the highest salary for each department
+ #Note :  1. condition can be in (Not =) 2. In can be a group (departmentId, salary) in 3. group by : need to select the colomn of the group by as well
+ select d.Name as Department, e.Name as Employee, e.Salary  from Employee e join Department d 
+where e.DepartmentId=d.Id and (e.DepartmentId, e.Salary) in (select e2.DepartmentId , max(e2.Salary) from Employee e2 group by e2.departmentId);
+
+#14 : change to neighboring seat
+SELECT *
+FROM
+(SELECT id+1 as id, student FROM seat WHERE id%2=1 AND id not in (select max(id) from seat)
+UNION
+SELECT id-1 as id, student FROM seat WHERE id%2=0
+UNION
+SELECT id, student FROM seat WHERE id%2=1 and id in (select max(id) from seat)
+) as s
+ORDER BY id
+
+#15 : consequnce numbers 
+#join self tables 3 times  with id no differences
+# Write your MySQL query statement below
+select distinct a.num as ConsecutiveNums
+from Logs a, Logs b, Logs c
+where a.id = b.id-1
+and a.id = c.id-2
+and a.num =b.num
+and a.num = c.num
+
+#16 : rank scores : 
+SELECT score,
+       DENSE_RANK() OVER (ORDER BY score desc) as "rank"
+FROM Scores
+

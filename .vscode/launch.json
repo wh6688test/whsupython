@@ -1,0 +1,19 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - quiz8",
+            "request": "launch",
+            "mainClass": "quiz8",
+            "projectName": "quiz_f672567b"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - quiz",
+            "request": "launch",
+            "mainClass": "quiz",
+            "projectName": "quiz_f672567b"
+        }
+    ]
+   
+}

@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "target": "ES6",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "removeComments": true,
+        "noImplicitAny": true,
+        "rootDir": ".",
+        "outDir": ".",
+        "lib": ["ES6", "DOM"],
+
+    },
+    "exclude": [
+        ".idea",
+        "build",
+        "node_modules",
+        "typings/globals",
+        "typings/modules",
+        "../../../node_modules",
+    ]
+}
